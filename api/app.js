@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import express from 'express';
 import cors from 'cors'
 import mongoose from 'mongoose';
+import ScanningRouter from './src/routes/scanning';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000
@@ -11,7 +12,9 @@ app.use(cors())
 app.use(express.json()) // pars request to JSON
 app.use(express.urlencoded({extended:true})) // pars encoded request to JSON
 
-app.use((err,req,res,nest)=>{
+app.use("/scanning",ScanningRouter);
+
+app.use((err,req,res,next)=>{
     res.status(500).send({message:err.message})
 })
 
