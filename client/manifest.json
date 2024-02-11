@@ -3,8 +3,9 @@
   "name": "CensureIt",
   "version": "1.0",
   "description": "",
-  "action":{
-    "default_popup": "popup.html"
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "./pages/login.html"
   },
   "icons": {
     "16": "images/icon-16.png",
@@ -15,10 +16,7 @@
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "matches": [
-        "https://developer.chrome.com/docs/extensions/*",
-        "https://developer.chrome.com/docs/webstore/*"
-      ]
+      "matches": ["https://*/*","http://*/*"]
     }
   ]
 }
