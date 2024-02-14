@@ -1,8 +1,5 @@
-// content.js
-
-// Function to replace content on the page
-function replaceContent() {
-    const newContent = `
+function renderBlockPage (description) {
+  const newContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -63,18 +60,130 @@ function replaceContent() {
               <div class="content">
                   <div class="about">
                       <h2>Why this page was blocked?</h2>
-                      <p>Violation of Terms of Service: The page may have violated the terms of service of the platform or website hosting it. This could include posting prohibited content, engaging in illegal activities, or breaching community guidelines.</p>
+                      <p> ${description}</p>
                   </div>
               </div>
           </div>
+
+
       </body>
       </html>
-    `;
-  
-    // Replace the content of the entire page with newContent
-    document.documentElement.innerHTML = newContent;
+    `
+
+  // Replace the content of the entire page with newContent
+  document.documentElement.innerHTML = newContent
+}
+
+// Extention starter function
+function onLoaded () {
+  let currentUrl = window.location.toString()
+  let userData
+  // Create a URL object
+  let url = new URL(currentUrl)
+
+  // Get the protocol, hostname, and port
+  let baseUrl = url.protocol + '//' + url.hostname
+  renderBlockPage(`${baseUrl}`)
+  try {
+    userData = getUserCredentials()
+    checkURL(baseUrl, userData,censureWebPage)
+  } catch {}
+}
+
+// Getting user's Id and Token
+const getUserCredentials = () => {
+  let token
+  let userId
+  try {
+    chrome.storage.local.get(['token']).then(result => {
+      token = result
+    })
+    chrome.storage.local.get(['userId']).then(result => {
+      userId = result
+    })
+    return { token, userId }
+  } catch {
+    alert('User Unauthorized')
   }
-  
-  // Call replaceContent when the DOM content is loaded
-  replaceContent();
-  
+}
+
+// Checking if URL exist in database,returns block page if webpage exist and not match to users configuration
+async function checkURL (baseUrl, { userId, token },callback) {
+  const apiURL = 'https://example.com/api/login' //!
+
+  const data = {
+    link: baseUrl,
+    userId: userId
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }
+
+  await fetch(apiURL, options)
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        alert('Error: ' + response.statusText)
+      }
+    })
+    .then(data => {
+      if (!data.isExist) {
+        callback(userId, token)
+      } else if (!data.isAllowed) {
+        renderBlockPage(data.description)
+      }
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error:', error.message)
+      // Display error to user or perform other error handling tasks
+    })
+}
+
+// Censuring currend DOM,replacing dyrtes words to "****"
+async function censureWebPage (userId, token) {
+  const apiURL = 'https://example.com/api/login' //!
+
+  const data = {
+    webPage: htmlContent,
+    userId: userId
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }
+
+  await fetch(apiURL, options)
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        alert('Error: ' + response.statusText)
+      }
+    })
+    .then(data => {
+      if (!data.isAllowed) {
+        renderBlockPage(data.description)
+      } else {
+        document.documentElement.innerHTML = data.censuredWebPage
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error.message)
+    })
+}
+
+//* Extention starts here
+onLoaded()

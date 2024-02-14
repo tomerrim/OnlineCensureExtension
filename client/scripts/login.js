@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Check if a token already exists in localStorage
-    var token = localStorage.getItem("token");
+    let token;
+    chrome.storage.local.get(['token']).then(result => {
+        token = result
+      })
     if (token) {
         // Redirect to the configuration page
         window.location.href = "../pages/config.html";
@@ -24,18 +27,16 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error("Login failed. Please check your credentials and try again.");
+            alert("Login failed. Please check your credentials and try again.");
         }
         return response.json();
     })
     .then(data => {
-        // Assuming your API returns a token in the response
-        var token = data.token;
+        let token = data.token;
+        let userId = data.userId
+        chrome.storage.local.set({ "token": token });
+        chrome.storage.local.set({ "userId": userId });
 
-        // Store the token in local storage
-        localStorage.setItem("token", token);
-
-        // Redirect to the configuration page
         window.location.href = "../pages/config.html";
     })
     .catch(error => {

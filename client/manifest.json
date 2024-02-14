@@ -3,7 +3,7 @@
   "name": "CensureIt",
   "version": "1.0",
   "description": "",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab","storage"],
   "action": {
     "default_popup": "./pages/login.html"
   },

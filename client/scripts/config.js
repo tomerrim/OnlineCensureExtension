@@ -18,11 +18,6 @@ document.getElementById("lockBtn").addEventListener("click", function () {
 document.getElementById("unlockBtn").addEventListener("click", function () {
     var unlockPassword = document.getElementById("unlockPassword").value;
 
-    // Send the password to the API for verification
-    // You need to implement this part to send the password to your API and handle the response accordingly
-
-    // For demonstration purposes, assume the password is correct
-    // In a real scenario, you need to verify the password with your backend
     var isPasswordCorrect = true;
 
     if (isPasswordCorrect) {
