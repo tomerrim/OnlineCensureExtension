@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import express from 'express';
 import cors from 'cors'
 import mongoose from 'mongoose';
-import ScanningRouter from './src/routes/scanning';
+import ScanningRouter from "./src/routes/scanning.ts";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000

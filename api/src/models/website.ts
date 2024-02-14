@@ -1,7 +1,7 @@
 import mongoose, { InferSchemaType, Schema, model } from "mongoose";
 
 const websiteSchema = new Schema({
-    Link: { type: String, required: true },
+    link: { type: String, required: true },
     blockPercentage: { type: Number, required: true },
     categoryId: { type: mongoose.Types.ObjectId, required: true }
 });
