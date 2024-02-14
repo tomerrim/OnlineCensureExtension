@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// mongoose.connect("mongodb+srv://shmuel:dkLtpzj30rEsBm5r@censure-extension.cktgnej.mongodb.net/");
 
 const createCategory = (categoryData: category) => {
     return new Promise<category>((resolve, reject) => {

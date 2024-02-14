@@ -11,11 +11,8 @@ const userSchema = new Schema({
     personalBlockPercentage: { type: Number, default: 0 }, // ! TODO - think about the default value
 });
 
-// const user = mongoose.model("user", userSchema);
 type user = InferSchemaType<typeof userSchema>;
 type userWithId = { _id: mongoose.Types.ObjectId } & user;
-
 const userModel = model("user", userSchema);
 
 export { user, userWithId, userModel, userSchema }
-

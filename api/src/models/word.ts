@@ -10,11 +10,3 @@ type wordWithId = { _id: mongoose.Types.ObjectId } & word;
 const wordModel = model("word", wordSchema);
 
 export { word, wordWithId, wordModel, wordSchema}
-
-
-
-// export type word = {
-//     id: ObjectId;
-//     content: string;
-//     categoryId: ObjectId;
-// };

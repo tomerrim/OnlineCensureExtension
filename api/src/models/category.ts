@@ -9,5 +9,4 @@ type category = InferSchemaType<typeof categorySchema>;
 type categoryWithId = { _id: mongoose.Types.ObjectId } & category;
 const categoryModel = model("category", categorySchema);
 
-
 export { category, categoryWithId, categorySchema, categoryModel }
