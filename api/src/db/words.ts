@@ -1,76 +1,66 @@
 import mongoose from 'mongoose';
 import { word, wordModel } from '../models/word';
-import { connectToMongoDB } from './mongo';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const createWord = (wordData: word) => {
     return new Promise<word>((resolve, reject) => {
-        connectToMongoDB()
-            .then(() => {
-                wordModel.create(wordData, (err: string, createdWord: word) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(createdWord);
-                });
-            })
-            .catch((error) => {
+        mongoose.connect(process.env.MONGO_URL as string).then(() => {
+            if (!wordModel.collection) {
+                wordModel.createCollection();
+            }
+            const createdWord = wordModel.create(wordData).catch((error) => {
                 reject(error);
             });
+            resolve(createdWord as unknown as word);
+        });
     });
-};
+}
 
 const getWord = (id: mongoose.Types.ObjectId) => {
-    return new Promise<word>((resolve, reject) => {
-        connectToMongoDB()
-            .then(() => {
-                wordModel.findById(id, (err: string, foundWord: word) => {
-                    if (err || !foundWord) {
-                        reject(err ?? "word not found");
-                    }
-                    resolve(foundWord);
-                });
-            })
-            .catch((error) => {
+    return new Promise<word>(async (resolve, reject) => {
+        mongoose.connect(process.env.MONGO_URL as string).then(async () => {
+            if (!wordModel.collection) {
+                wordModel.createCollection();
+                reject("collection not found");
+            }
+            const foundWord = await wordModel.findById(id).exec().catch((error) => {
                 reject(error);
             });
+            resolve(foundWord as word);
+        });
     });
 };
 
 const updateWord = (id: mongoose.Types.ObjectId, updatedWordData: Partial<word>) => {
     return new Promise<word>((resolve, reject) => {
-        connectToMongoDB()
-            .then(() => {
-                wordModel.findByIdAndUpdate(
-                    id,
-                    updatedWordData,
-                    (err: string, updatedWord: word) => {
-                        if (err || !updatedWord) {
-                            reject(err ?? "word not found");
-                        }
-                        resolve(updatedWord);
-                    }
-                );
-            })
-            .catch((error) => {
-                reject(error);
-            });
-    });
+        mongoose.connect(process.env.MONGO_URL as string).then(async () => {
+            if (!wordModel.collection) {
+                wordModel.createCollection();
+                reject("collection not found");
+            }
+            const updatedWord = await wordModel.findByIdAndUpdate(id, updatedWordData).exec().catch(err => {
+                if (err || !updatedWord) {
+                    reject(err ?? "Word not found");
+                }
+                resolve(updatedWord as word);
+            }
+            );
+        });
+    })
 };
 
 const deleteWord = (id: mongoose.Types.ObjectId) => {
-    return new Promise<void>((resolve, reject) => {
-        connectToMongoDB()
-            .then(() => {
-                wordModel.findByIdAndDelete(id, (err: string) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve();
-                });
-            })
-            .catch((error) => {
-                reject(error);
+    return new Promise<void>(async (resolve, reject) => {
+        mongoose.connect(process.env.MONGO_URL as string).then(async () => {
+            await wordModel.findByIdAndDelete(id).exec().catch(err => {
+                if (err) {
+                    reject(err);
+                }
             });
+            resolve();
+        });
     });
 };
 
