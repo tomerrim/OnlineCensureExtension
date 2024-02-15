@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+import userRouter from './src/routes/user';
 import dotenv from "dotenv";
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
@@ -13,6 +15,7 @@ app.use(cors());
 app.use(express.json()); // pars request to JSON
 app.use(express.urlencoded({ extended: true })); // pars encoded request to JSON
 
+app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/scanning", ScanningRouter);
 
