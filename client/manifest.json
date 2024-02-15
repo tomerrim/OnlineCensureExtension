@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "CensureIt",
   "version": "1.0",
-  "description": "",
-  "permissions": ["activeTab"],
+  "description": "test",
+  "permissions": ["activeTab","tabs","storage"],
   "action": {
     "default_popup": "./pages/login.html"
   },
