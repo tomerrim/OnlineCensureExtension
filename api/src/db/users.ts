@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { user, userModel } from '../models/user';
+import { user, userModel, userWithId } from '../models/user';
 
 
 const createUser = (userData: user) => {
-    return new Promise<user>((resolve, reject) => {
+    return new Promise<userWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(() => {
             if (!userModel.collection) {
                 userModel.createCollection();
@@ -11,13 +11,13 @@ const createUser = (userData: user) => {
             const createdUser = userModel.create(userData).catch(error => {
                 reject(error);
             });
-            resolve(createdUser as unknown as user);
+            resolve(createdUser as unknown as userWithId);
         })
     });
 }
 
 const getUser = (id: mongoose.Types.ObjectId) => {
-    return new Promise<user>((resolve, reject) => {
+    return new Promise<userWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!userModel.collection) {
                 userModel.createCollection();
@@ -26,13 +26,13 @@ const getUser = (id: mongoose.Types.ObjectId) => {
             const foundUser = await userModel.findById(id).exec().catch((error) => {
                 reject(error);
             });
-            resolve(foundUser as user);
+            resolve(foundUser as userWithId);
         })
     });
 };
 
 const updateUser = (id: mongoose.Types.ObjectId, updatedUserData: Partial<user>) => {
-    return new Promise<user>((resolve, reject) => {
+    return new Promise<userWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!userModel.collection) {
                 userModel.createCollection();
@@ -42,7 +42,7 @@ const updateUser = (id: mongoose.Types.ObjectId, updatedUserData: Partial<user>)
                 if (err || !updatedUser) {
                     reject(err ?? "user not found");
                 }
-                resolve(updatedUser as user);
+                resolve(updatedUser as userWithId);
             })
         });
     })

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { email, emailModel } from '../models/email';
+import { email, emailModel, emailWithId } from '../models/email';
 
 const createEmail = (mailData: email) => {
-    return new Promise<email>(async (resolve, reject) => {
+    return new Promise<emailWithId>(async (resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!emailModel.collection) {
                 emailModel.createCollection();
@@ -12,13 +12,13 @@ const createEmail = (mailData: email) => {
                     reject(err);
                 }
             })
-            resolve(createdEmail as email);
+            resolve(createdEmail as unknown as emailWithId);
         })
     });
 };
 
 const getEmail = (id: mongoose.Types.ObjectId) => {
-    return new Promise<email>(async (resolve, reject) => {
+    return new Promise<emailWithId>(async (resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!emailModel.collection) {
                 emailModel.createCollection();
@@ -27,13 +27,13 @@ const getEmail = (id: mongoose.Types.ObjectId) => {
             const foundEmail = await emailModel.findById(id).catch((error) => {
                 reject(error);
             });
-            resolve(foundEmail as email);
+            resolve(foundEmail as unknown as emailWithId);
         });
     });
 };
 
 const updateEmail = (id: mongoose.Types.ObjectId, updatedEmailData: Partial<email>) => {
-    return new Promise<email>(async (resolve, reject) => {
+    return new Promise<emailWithId>(async (resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!emailModel.collection) {
                 emailModel.createCollection();
@@ -43,7 +43,7 @@ const updateEmail = (id: mongoose.Types.ObjectId, updatedEmailData: Partial<emai
                 .catch((error) => {
                     reject(error);
                 });
-            resolve(updatedEmail as email);
+            resolve(updatedEmail as unknown as emailWithId);
         })
     });
 };

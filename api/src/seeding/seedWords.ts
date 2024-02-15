@@ -393,7 +393,7 @@ const pornWords = [
     "zoophilia"
 ]
 
-const violanceWords = [
+const violenceWords = [
     "shit",
     "fucking hell"
 ];
@@ -405,4 +405,4 @@ const insultWords = [
     "nigga",
 ]
 
-export { pornWords, violanceWords, insultWords }
+export { pornWords, violenceWords, insultWords }

@@ -1,30 +1,37 @@
 import { createCategory } from "../db/categories";
 import { createWord } from "../db/words";
-import { ObjectId } from 'bson';
-import { insultWords, pornWords, violanceWords } from "./seedWords";
+import { insultWords, pornWords, violenceWords } from "./seedWords";
+import { ObjectId } from "bson";
 
 console.log("seeding db...");
 
-createCategory({
-    name: 'violence',
-    description: 'Contains violent content'
-});
-createCategory({
-    name: "insult",
-    description: "contains insults"
-})
+const listOfWordList: any[][] = [[pornWords], [violenceWords], [insultWords]];
+
 createCategory({
     name: "pornography",
     description: "contains sexually explicit content"
+}).then((category) => {
+    listOfWordList[0].push(category._id);
+})
+createCategory({
+    name: 'violence',
+    description: 'Contains violent content'
+}).then((category) => {
+    listOfWordList[1].push(category._id);
+})
+createCategory({
+    name: "insult",
+    description: "contains insults"
+}).then((category) => {
+    listOfWordList[2].push(category._id);
 })
 
-const listOfWordList = [pornWords, violanceWords, insultWords]
 
 for (let listWord of listOfWordList) {
-    for (let word of listWord) {
+    for (let word of listWord[0]) {
         createWord({
             content: word,
-            categoryId: new ObjectId("65cc7c8ea91c7af974942b99")
+            categoryId: new ObjectId(listWord[1])
         });
     }
 }

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import { word, wordModel } from '../models/word';
+import { word, wordModel, wordWithId } from '../models/word';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const createWord = (wordData: word) => {
-    return new Promise<word>((resolve, reject) => {
+    return new Promise<wordWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(() => {
             if (!wordModel.collection) {
                 wordModel.createCollection();
@@ -13,13 +13,13 @@ const createWord = (wordData: word) => {
             const createdWord = wordModel.create(wordData).catch((error) => {
                 reject(error);
             });
-            resolve(createdWord as unknown as word);
+            resolve(createdWord as unknown as wordWithId);
         });
     });
 }
 
 const getWord = (id: mongoose.Types.ObjectId) => {
-    return new Promise<word>(async (resolve, reject) => {
+    return new Promise<wordWithId>(async (resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!wordModel.collection) {
                 wordModel.createCollection();
@@ -28,13 +28,13 @@ const getWord = (id: mongoose.Types.ObjectId) => {
             const foundWord = await wordModel.findById(id).exec().catch((error) => {
                 reject(error);
             });
-            resolve(foundWord as word);
+            resolve(foundWord as wordWithId);
         });
     });
 };
 
 const updateWord = (id: mongoose.Types.ObjectId, updatedWordData: Partial<word>) => {
-    return new Promise<word>((resolve, reject) => {
+    return new Promise<wordWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!wordModel.collection) {
                 wordModel.createCollection();
@@ -44,7 +44,7 @@ const updateWord = (id: mongoose.Types.ObjectId, updatedWordData: Partial<word>)
                 if (err || !updatedWord) {
                     reject(err ?? "Word not found");
                 }
-                resolve(updatedWord as word);
+                resolve(updatedWord as wordWithId);
             }
             );
         });

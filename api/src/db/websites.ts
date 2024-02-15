@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import { website, websiteModel } from '../models/website';
+import { website, websiteModel, websiteWithId } from '../models/website';
 
 
 
 const createWebsite = (websiteData: website) => {
-    return new Promise<website>((resolve, reject) => {
+    return new Promise<websiteWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(() => {
             if (!websiteModel.collection) {
                 websiteModel.createCollection();
@@ -12,13 +12,13 @@ const createWebsite = (websiteData: website) => {
             const createdWebsite = websiteModel.create(websiteData).catch(error => {
                 reject(error);
             });
-            resolve(createdWebsite as unknown as website);
+            resolve(createdWebsite as unknown as websiteWithId);
         })
     });
 }
 
 const getWebsite = (id: mongoose.Types.ObjectId) => {
-    return new Promise<website>((resolve, reject) => {
+    return new Promise<websiteWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async() => {
             if (!websiteModel.collection) {
                 websiteModel.createCollection();
@@ -27,13 +27,13 @@ const getWebsite = (id: mongoose.Types.ObjectId) => {
             const foundWebsite = await websiteModel.findById(id).exec().catch(error => {
                 reject(error);
             });
-            resolve(foundWebsite as website);
+            resolve(foundWebsite as websiteWithId);
         })
     });
 };
 
 const updateWebsite = (id: mongoose.Types.ObjectId, updatedWebsiteData: Partial<website>) => {
-    return new Promise<website>((resolve, reject) => {
+    return new Promise<websiteWithId>((resolve, reject) => {
         mongoose.connect(process.env.MONGO_URL as string).then(async () => {
             if (!websiteModel.collection) {
                 websiteModel.createCollection();
@@ -43,7 +43,7 @@ const updateWebsite = (id: mongoose.Types.ObjectId, updatedWebsiteData: Partial<
                 if (err || !updatedWebsite) {
                     reject(err ?? "user not found");
                 }
-                resolve(updatedWebsite as website);
+                resolve(updatedWebsite as websiteWithId);
             });
         })
     })
