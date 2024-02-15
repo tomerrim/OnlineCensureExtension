@@ -1,3 +1,5 @@
+const api = 'https://example.com/' //!
+
 function renderBlockPage (description) {
   const newContent = `
       <!DOCTYPE html>
@@ -83,10 +85,10 @@ function onLoaded () {
 
   // Get the protocol, hostname, and port
   let baseUrl = url.protocol + '//' + url.hostname
-  renderBlockPage(`${baseUrl}`)
+  // renderBlockPage(`${baseUrl}`)
   try {
     userData = getUserCredentials()
-    checkURL(baseUrl, userData,censureWebPage)
+    checkURL(baseUrl, userData, censureWebPage)
   } catch {}
 }
 
@@ -108,9 +110,7 @@ const getUserCredentials = () => {
 }
 
 // Checking if URL exist in database,returns block page if webpage exist and not match to users configuration
-async function checkURL (baseUrl, { userId, token },callback) {
-  const apiURL = 'https://example.com/api/login' //!
-
+async function checkURL (baseUrl, { userId, token }, callback) {
   const data = {
     link: baseUrl,
     userId: userId
@@ -125,7 +125,7 @@ async function checkURL (baseUrl, { userId, token },callback) {
     body: JSON.stringify(data)
   }
 
-  await fetch(apiURL, options)
+  await fetch(`${api}/scan/link`, options)
     .then(response => {
       if (response.ok) {
         return response.json()
@@ -149,7 +149,6 @@ async function checkURL (baseUrl, { userId, token },callback) {
 
 // Censuring currend DOM,replacing dyrtes words to "****"
 async function censureWebPage (userId, token) {
-  const apiURL = 'https://example.com/api/login' //!
 
   const data = {
     webPage: htmlContent,
@@ -165,7 +164,7 @@ async function censureWebPage (userId, token) {
     body: JSON.stringify(data)
   }
 
-  await fetch(apiURL, options)
+  await fetch(`${api}/scan/text`, options)
     .then(response => {
       if (response.ok) {
         return response.json()
