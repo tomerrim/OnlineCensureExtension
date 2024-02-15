@@ -5,7 +5,7 @@ const emailSchema = new Schema({
 });
 
 type email = InferSchemaType<typeof emailSchema>;
-
+type emailWithId = { _id: Schema.Types.ObjectId } & email;
 const emailModel = model("email", emailSchema);
 
 // type email = `${string}@${string}.com`;
@@ -15,7 +15,4 @@ function isEmail(mail: {address: string}): mail is email {
     return emailRegex.test(mail.address);
 }
 
-
-
-
-export { email, isEmail, emailModel, emailSchema }
+export { email, emailWithId, isEmail, emailModel, emailSchema }

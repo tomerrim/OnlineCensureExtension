@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, model } from 'mongoose';
+import mongoose, { InferSchemaType, Schema, model } from 'mongoose';
 
 const categorySchema = new Schema({
     name: { type: String, required: true },
@@ -6,14 +6,7 @@ const categorySchema = new Schema({
 });
 
 type category = InferSchemaType<typeof categorySchema>;
+type categoryWithId = { _id: mongoose.Types.ObjectId } & category;
 const categoryModel = model("category", categorySchema);
 
-export { category, categorySchema, categoryModel }
-
-// export default model("category", categorySchema);
-
-// export type category = {
-//     id: ObjectId;
-//     name: string;
-//     description: string;
-// };
+export { category, categoryWithId, categorySchema, categoryModel }
