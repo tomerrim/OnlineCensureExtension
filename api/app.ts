@@ -6,7 +6,7 @@ import ScanningRouter from './src/routes/scanning';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000
-const app = express()
+const app = express();
 
 app.use(cors())
 app.use(express.json()) // pars request to JSON
@@ -19,7 +19,7 @@ app.use((err,req,res,next)=>{
 })
 
 mongoose
-  .connect(process.env.MONGO_DB)
+  .connect(process.env.MONGO_URL)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)

@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon app.js",
-    "seed": "npx ts-node ./src/seedDb.ts",
+    "start": "node ./dist/app.js",
+    "dev": "nodemon app.ts",
+    "seed": "ts-node ./src/seeding/seedDb.ts",
+    "build": "npm i && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

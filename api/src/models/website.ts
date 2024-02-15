@@ -1,21 +1,13 @@
 import mongoose, { InferSchemaType, Schema, model } from "mongoose";
 
 const websiteSchema = new Schema({
-    Link: { type: String, required: true },
+    link: { type: String, required: true },
     blockPercentage: { type: Number, required: true },
-    categoryId: { type: mongoose.Types.ObjectId, required: true }
+    categoryId: { type: Schema.Types.ObjectId, required: true }
 });
 
 type website = InferSchemaType<typeof websiteSchema>;
-
+type websiteWithId = { _id: mongoose.Types.ObjectId } & website;
 const websiteModel = model("website", websiteSchema);
 
-export { website, websiteModel, websiteSchema}
-
-
-//  type website = {
-//     id: ObjectId;
-//     Link: string;
-//     blockPercentage: number;
-//     categoryId: ObjectId;
-// };
+export { website, websiteWithId, websiteModel, websiteSchema}
